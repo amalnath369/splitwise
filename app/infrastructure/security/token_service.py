@@ -12,16 +12,16 @@ def create_token(user_id: str) -> str:
     payload = {
         "sub": user_id,
         "exp": datetime.now(timezone.utc) + timedelta(
-            minutes=settings.access_token_expire_minutes
+            minutes=settings.ACCESS_TOKEN_EXPIRE_MINUTES
         ),
         "jti": str(uuid.uuid4()),
     }
-    return jwt.encode(payload, settings.secret_key, algorithm=settings.algorithm)
+    return jwt.encode(payload, settings.SECRET_KEY, algorithm=settings.ALGORITHM)
 
 
 def verify_token(token: str) -> str:
     try:
-        payload = jwt.decode(token, settings.secret_key, algorithms=[settings.algorithm])
+        payload = jwt.decode(token, settings.SECRET_KEY, algorithms=[settings.ALGORITHM])
         user_id: str | None = payload.get("sub")
         if not user_id:
             raise UnauthorizedError("Token missing subject")
