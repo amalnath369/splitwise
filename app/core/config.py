@@ -4,12 +4,14 @@ from pydantic_settings import BaseSettings, SettingsConfigDict
 
 
 class Settings(BaseSettings):
-    
-    database_url: str
-    secret_key: str
-    algorithm: str = "HS256"
-    access_token_expire_minutes: int = 60
-    debug: bool = False
+    APP_NAME: str = "Splitwise API"
+    VERSION: str = "1.0.0"
+
+    DATABASE_URL: str
+    SECRET_KEY: str
+    ALGORITHM: str = "HS256"
+    ACCESS_TOKEN_EXPIRE_MINUTES: int = 60
+    DEBUG: bool = False
 
     model_config = SettingsConfigDict(
         env_file=".env",
