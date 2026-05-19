@@ -14,15 +14,17 @@ class Group:
     id: EntityID
     name: str
     created_by: EntityID
+    description: str = ""
     member_ids: set[EntityID] = field(default_factory=set)
 
     @classmethod
-    def create(cls, name: str, created_by: EntityID) -> Group:
+    def create(cls, name: str, created_by: EntityID, description: str = "") -> Group:
         group = cls(
             id=EntityID.generate(),
             name=name,
             created_by=created_by,
-            member_ids=[],
+            description=description,
+            member_ids=set(),
         )
         group.add_member(created_by)
         return group
