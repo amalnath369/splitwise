@@ -1,4 +1,5 @@
 from __future__ import annotations
+from contextlib import asynccontextmanager
 
 from fastapi import FastAPI, Request
 from fastapi.responses import JSONResponse
@@ -19,13 +20,14 @@ from app.interface.v1.api.routes.expenses import router as expenses_router
 from app.core.config import settings
 
 
-app = FastAPI(title=settings.APP_NAME, version=settings.VERSION)
-
-
-@app.on_event("startup")
-async def create_tables() -> None:
+@asynccontextmanager
+async def lifespan(_app: FastAPI):
     async with engine.begin() as conn:
         await conn.run_sync(Base.metadata.create_all)
+    yield
+
+
+app = FastAPI(title=settings.APP_NAME, version=settings.VERSION, lifespan=lifespan)
 
 
 # --- Exception handlers ---
