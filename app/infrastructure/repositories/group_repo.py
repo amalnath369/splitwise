@@ -17,7 +17,6 @@ def _to_entity(model: GroupModel) -> Group:
         description=model.description,
         created_by=EntityID(model.created_by),
         member_ids={EntityID(m.user_id) for m in model.members if not m.is_deleted},
-        is_deleted=model.is_deleted,
     )
 
 
@@ -41,7 +40,6 @@ class GroupRepository(AbstractGroupRepository):
             name=group.name,
             description=group.description,
             created_by=group.created_by.value,
-            is_deleted=group.is_deleted,
         )
         self.session.add(model)
 
@@ -61,7 +59,6 @@ class GroupRepository(AbstractGroupRepository):
 
         model.name = group.name
         model.description = group.description
-        model.is_deleted = group.is_deleted
 
         existing = await self.session.execute(
             select(GroupMemberModel)
