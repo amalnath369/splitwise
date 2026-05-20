@@ -15,6 +15,7 @@ class Group:
     name: str
     created_by: EntityID
     description: str = ""
+    is_deleted: bool = False
     member_ids: set[EntityID] = field(default_factory=set)
 
     @classmethod
