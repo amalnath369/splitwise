@@ -25,7 +25,7 @@ async def register(
 ) -> RegisterResponse:
     dto = RegisterDTO(email=body.email, raw_password=body.password)
     user = await use_case.execute(dto)
-    return RegisterResponse.model_validate(user, from_attributes=True)
+    return RegisterResponse(id=user.id.value, email=str(user.email))
 
 
 @router.post("/login", response_model=TokenResponse)

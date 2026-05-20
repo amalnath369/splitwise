@@ -3,7 +3,7 @@ from decimal import Decimal
 from uuid import UUID
 from typing import List
 
-from fastapi import APIRouter, Depends
+from fastapi import APIRouter, Depends, Response
 
 from app.application.expenses.create_expense import CreateExpenseDTO, CreateExpenseUseCase
 from app.application.expenses.list_expense import ListExpensesDTO, ListExpensesUseCase
@@ -87,14 +87,15 @@ async def list_expenses(
     ]
 
 
-@router.delete("/expenses/{expense_id}", status_code=204)
+@router.delete("/expenses/{expense_id}", status_code=204, response_class=Response)
 async def delete_expense(
     expense_id: UUID,
     user_id: str = Depends(get_current_user_id),
     use_case: DeleteExpenseUseCase = Depends(get_delete_expense_use_case),
-) -> None:
+) -> Response:
     dto = DeleteExpenseDTO(expense_id=str(expense_id), requester_id=user_id)
     await use_case.execute(dto)
+    return Response(status_code=204)
 
 
 @router.get("/{group_id}/balances", response_model=List[BalanceResponse])
